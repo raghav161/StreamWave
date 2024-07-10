@@ -9,7 +9,7 @@ const Navbar = () => (
     <Link to="/" style={{ display: "flex", alignItems: "center" }}>
       <img src={logo} alt="logo" height={45} />
       <Typography variant="body2" sx={{ color: '#fff', marginLeft: 2, fontSize: '2em' }}>
-        VideoTube
+        StreamWave
       </Typography>
     </Link>
     <SearchBar />
