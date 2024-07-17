@@ -130,7 +130,7 @@ const VideoCard = ({ video: { id: { videoId }, snippet, statistics, contentDetai
             </Typography>
           </Box>
         </Link>
-        <Typography variant="body2" color="gray">
+        <Typography variant="body2" sx={{ position: 'absolute', bottom: '5px', left: '10px' }} color="gray">
           {statistics ? formatViewCount(parseInt(statistics.viewCount)) : ''}
           {' - '}
           {timeAgo(snippet?.publishedAt)}
