@@ -4,6 +4,17 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Link } from 'react-router-dom';
 import { demoProfilePicture } from '../utils/constants';
 
+const formatsubsCount = (subscriberCount) => {
+  if (subscriberCount >= 1000000000) {
+    return (subscriberCount / 1000000000).toFixed(1) + 'B';
+  } else if (subscriberCount >= 1000000) {
+    return (subscriberCount / 1000000).toFixed(1) + 'M';
+  } else if (subscriberCount >= 1000) {
+    return (subscriberCount / 1000).toFixed(1) + 'K';
+  }
+  return subscriberCount.toString() + ' ';
+};
+
 const ChannelCard = ({ channelDetail, marginTop }) => (
   <Box
     sx={{
@@ -31,7 +42,12 @@ const ChannelCard = ({ channelDetail, marginTop }) => (
         </Typography>
         {channelDetail?.statistics?.subscriberCount && (
           <Typography sx={{ fontSize: '15px', fontWeight: 500, color: 'gray' }}>
-            {parseInt(channelDetail?.statistics?.subscriberCount).toLocaleString('en-US')} Subscribers
+            {formatsubsCount(parseInt(channelDetail?.statistics?.subscriberCount))} Subscribers
+          </Typography>
+        )}
+         {channelDetail?.statistics?.videoCount && (
+          <Typography sx={{ fontSize: '15px', fontWeight: 500, color: 'gray', mt: 1 }}>
+            {channelDetail?.statistics?.videoCount.toLocaleString()} Videos
           </Typography>
         )}
       </CardContent>
