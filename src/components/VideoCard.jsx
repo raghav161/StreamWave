@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { Typography, Card, CardContent, CardMedia, Avatar } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -66,41 +66,81 @@ const formatDuration = (duration, liveBroadcastContent) => {
   return formattedDuration;
 };
 
-const VideoCard = ({ video: { id: { videoId }, snippet, statistics, contentDetails }, channelThumbnail }) => (
-  <Card sx={{ boxShadow: "none", borderRadius: '20px', width: '100%', maxWidth: '360px', margin: '2px' }}>
-    <Link to={videoId ? `/video/${videoId}` : `/video/cV2gBU6hKfY`}>
-      <CardMedia 
-        component="img"
-        image={snippet?.thumbnails?.high?.url} 
-        alt={snippet?.title}
-        sx={{ width: '100%', height: 'auto', aspectRatio: '16/9' }}
-      />
-    </Link>
-    <CardContent sx={{ backgroundColor: "#1E1E1E", padding: '10px', height: '100px', position: 'relative' }}>
-      <Link to={videoId ? `/video/${videoId}` : demoVideoUrl}>
-      <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#FFF' }}>
-          {snippet?.title.slice(0, 60) || demoVideoTitle.slice(0, 60)}
-        </Typography>
+const VideoCard = ({ video: { id: { videoId }, snippet, statistics, contentDetails }, channelThumbnail }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  return (
+    <Card
+      sx={{
+        boxShadow: "none",
+        borderRadius: '20px',
+        width: '100%',
+        maxWidth: '360px',
+        margin: '2px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Link to={videoId ? `/video/${videoId}` : `/video/cV2gBU6hKfY`}>
+        <CardMedia
+          component="img"
+          image={snippet?.thumbnails?.high?.url}
+          alt={snippet?.title}
+          sx={{ width: '100%', height: 'auto', aspectRatio: '16/9' }}
+        />
+        {isHovered && (
+        <iframe
+          title={snippet?.title}
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+          allow="autoplay; encrypted-media"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '70%',
+            objectFit: 'cover'
+          }}
+        />
+      )}
       </Link>
-      <Link to={snippet?.channelId ? `/channel/${snippet?.channelId}` : demoChannelUrl}>
-        <Box display="flex" alignItems="center">
-          <Avatar src={channelThumbnail} alt={snippet?.channelTitle} sx={{ width: 35, height: 35, m: 1, ml: 0 }} />
-          <Typography variant="subtitle2" color="gray">
-            {snippet?.channelTitle || demoChannelTitle}
-            <CheckCircleIcon sx={{ fontSize: "12px", color: "gray", ml: "5px" }} />
+      <CardContent sx={{ backgroundColor: "#1E1E1E", padding: '10px', height: '100px', position: 'relative' }}>
+        <Link to={videoId ? `/video/${videoId}` : demoVideoUrl}>
+          <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold', color: '#FFF' }}>
+            {snippet?.title.slice(0, 60) || demoVideoTitle.slice(0, 60)}
           </Typography>
-        </Box>
-      </Link>
-      <Typography variant="body2" color="gray">
-        {statistics ? formatViewCount(parseInt(statistics.viewCount)) : ''}
-        {' - '}
-        {timeAgo(snippet?.publishedAt)}
-      </Typography>
-      <Typography variant="body2" sx={{ position: 'absolute', bottom: '5px', right: '10px' }} color="gray">
-        {contentDetails?.duration ? formatDuration(contentDetails?.duration, snippet?.liveBroadcastContent) : ''}
-      </Typography>
-    </CardContent>
-  </Card>
-);
+        </Link>
+        <Link to={snippet?.channelId ? `/channel/${snippet?.channelId}` : demoChannelUrl}>
+          <Box display="flex" alignItems="center">
+            <Avatar src={channelThumbnail} alt={snippet?.channelTitle} sx={{ width: 35, height: 35, m: 1, ml: 0 }} />
+            <Typography variant="subtitle2" color="gray">
+              {snippet?.channelTitle || demoChannelTitle}
+              <CheckCircleIcon sx={{ fontSize: "12px", color: "gray", ml: "5px" }} />
+            </Typography>
+          </Box>
+        </Link>
+        <Typography variant="body2" color="gray">
+          {statistics ? formatViewCount(parseInt(statistics.viewCount)) : ''}
+          {' - '}
+          {timeAgo(snippet?.publishedAt)}
+        </Typography>
+        <Typography variant="body2" sx={{ position: 'absolute', bottom: '5px', right: '10px' }} color="gray">
+          {contentDetails?.duration ? formatDuration(contentDetails?.duration, snippet?.liveBroadcastContent) : ''}
+        </Typography>
+      </CardContent>
+      
+    </Card>
+  );
+};
 
 export default VideoCard;
