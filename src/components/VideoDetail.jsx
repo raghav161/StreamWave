@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
-import { Typography, Box, Stack, Avatar } from "@mui/material";
+import { Typography, Box, Stack, Avatar, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Videos, Loader } from "./";
 import { fetchFromAPI } from "../utils/fetchFromAPI";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const formatsubsCount = (subscriberCount) => {
   if (subscriberCount >= 1000000000) {
@@ -47,6 +49,18 @@ const VideoDetail = () => {
   const channelLogo = channelDetail?.snippet?.thumbnails?.default?.url;
   const subscriberCount = channelDetail?.statistics?.subscriberCount;
 
+  const handleShareClick = () => {
+    const videoUrl = `https://stream-wave-project.vercel.app/video/${id}`;
+    navigator.clipboard.writeText(videoUrl)
+      .then(() => {
+        toast.success("URL is copied to clipboard");
+      })
+      .catch((error) => {
+        toast.error("Failed to copy URL");
+        console.error("Error copying URL:", error);
+      });
+  };
+
   return (
     <Box style={{ margin: '25px' }}>
       <Stack direction={{ xs: "column", md: "row" }}>
@@ -76,6 +90,9 @@ const VideoDetail = () => {
                 <Typography variant="body1" sx={{ opacity: 0.7 }}>
                   {parseInt(likeCount).toLocaleString()} likes
                 </Typography>
+                <Button style={{backgroundColor: 'Red'}} variant="contained" color="primary" onClick={handleShareClick}>
+                  Share
+                </Button>
               </Stack>
             </Stack>
           </Box>
@@ -84,6 +101,7 @@ const VideoDetail = () => {
           <Videos videos={videos} direction="column" />
         </Box>
       </Stack>
+      <ToastContainer position="bottom-right" />
     </Box>
   );
 };
