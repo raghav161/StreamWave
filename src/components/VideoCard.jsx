@@ -84,10 +84,10 @@ const VideoCard = ({ video: { id: { videoId }, snippet, statistics, contentDetai
         boxShadow: "none",
         borderRadius: '20px',
         width: '100%',
-        maxWidth: '360px',
+        maxWidth: '380px',
         margin: '2px',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -104,6 +104,7 @@ const VideoCard = ({ video: { id: { videoId }, snippet, statistics, contentDetai
           title={snippet?.title}
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
           allow="autoplay; encrypted-media"
+          allowFullScreen
           style={{
             position: 'absolute',
             top: 0,
