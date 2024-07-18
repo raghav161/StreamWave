@@ -53,7 +53,7 @@ const VideoDetail = () => {
     const videoUrl = `https://stream-wave-project.vercel.app/video/${id}`;
     navigator.clipboard.writeText(videoUrl)
       .then(() => {
-        toast.success("URL is copied to clipboard");
+        toast.success("Link copied to clipboard");
       })
       .catch((error) => {
         toast.error("Failed to copy URL");
